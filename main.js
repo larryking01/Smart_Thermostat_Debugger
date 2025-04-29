@@ -151,14 +151,20 @@ const rooms = [
 ];
 
 
+// bug 3. linear-gradient values for cool and warm overlays were swapped.
+// fixed it by reversing them.
 const warmOverlay= `linear-gradient(
     to bottom,
-    rgba(141, 158, 247, 0.2),
-    rgba(194, 197, 215, 0.1)
+   rgba(236, 96, 98, 0.2),
+    rgba(248, 210, 211, 0.13)
   )`;
 
 
-const coolOverlay = `linear-gradient(to bottom, rgba(236, 96, 98, 0.2), rgba(248, 210, 211, 0.13))`;
+const coolOverlay = `linear-gradient(
+    to bottom,
+  rgba(141, 158, 247, 0.2),
+  rgba(194, 197, 215, 0.1)
+    )`;
 
 
 const setInitialOverlay = () => {
@@ -235,7 +241,7 @@ rooms.forEach((room) => {
 // Set current temperature to currently selected room
 const setSelectedRoom = (selectedRoom) => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom );
-  console.log( "selected room:", room )
+  // console.log( "selected room:", room )
 
 
   setIndicatorPoint(room.currTemp);
@@ -264,14 +270,38 @@ roomSelect.addEventListener("change", function ( event ) {
 
   setSelectedRoom(selectedRoom);
 
-  
 });
 
 
 // Set preset temperatures
 const defaultSettings = document.querySelector(".default-settings");
-defaultSettings.addEventListener("click", function (e) {});
+defaultSettings.addEventListener("click", function (e) {
+  console.log( "selected room from default settings = ", selectedRoom )
+  const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
 
+  console.log( room )
+
+
+  // console.log( e.target.id )
+  // bug fix: used event delegation to correctly update temperature with
+  // warm and cold presets
+  if( e.target.id === "cool" ) {
+    let updateTemperatureWithColdPreset = room.setCurrTemp.bind( room )
+    updateTemperatureWithColdPreset( room.coldPreset )
+    currentTemp.textContent = `${rooms[0].currTemp}°`;
+    setOverlay( room )
+  }
+  else if( e.target.id === "warm" ) {
+    let updateTemperatureWithWarmPreset = room.setCurrTemp.bind( room )
+    updateTemperatureWithWarmPreset( room.warmPreset )
+    currentTemp.textContent = `${rooms[0].currTemp}°`;
+    setOverlay( room )
+  }
+  else {
+    //
+  }
+
+});
 
 
 // Increase and decrease temperature
@@ -303,13 +333,13 @@ document.getElementById("increase").addEventListener("click", () => {
 
 document.getElementById("reduce").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
-  console.log("room from btn click:", selectedRoom)
+  // console.log("room from btn click:", selectedRoom)
 
   // room.decreaseTemp was being called but it was not binding to the actual
   // room, so 'this' inside decreaseTemp was undefined and calling the 
   // decreaseTemp function did not update the temperature.
   const decreaseRoomTemperature = room.decreaseTemp.bind(room);
-  console.log("decrease room temp:", decreaseRoomTemperature )
+  // console.log("decrease room temp:", decreaseRoomTemperature )
 
   if (room.currTemp > 10) {
     decreaseRoomTemperature();
@@ -334,6 +364,8 @@ const coolBtn = document.getElementById("cool");
 const warmBtn = document.getElementById("warm");
 
 
+
+
 const inputsDiv = document.querySelector(".inputs");
 // Toggle preset inputs
 document.getElementById("newPreset").addEventListener("click", () => {
@@ -349,6 +381,7 @@ document.getElementById("close").addEventListener("click", () => {
 });
 
 
+
 // handle preset input data
 document.getElementById("save").addEventListener("click", () => {
   const coolInput = document.getElementById("coolInput");
@@ -357,26 +390,67 @@ document.getElementById("save").addEventListener("click", () => {
 
   if (coolInput.value && warmInput.value) {
     // Validate the data
-    if (coolInput.value < 10 || coolInput.value > 25) {
-      errorSpan.style.display = "block";
-      errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
-    }
+    let coolInputValueAsNumber = Number.parseInt( coolInput.value )
+    let warmInputValueAsNumber = Number.parseInt( warmInput.value )
 
-    if (warmInput.value < 25 || warmInput.value > 32) {
+    console.log("cool input value = ", coolInputValueAsNumber )
+    console.log("warm input value = ", warmInputValueAsNumber )
+
+    // default presets range = 10 - 32
+
+    // if (coolInput.value < 10 || coolInput.value > 25) {
+    //   errorSpan.style.display = "block";
+    //   errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
+    // }
+
+    // if (warmInput.value < 25 || warmInput.value > 32) {
+    //   errorSpan.style.display = "block";
+    //   errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
+    // }
+    
+    if( coolInputValueAsNumber < 10 || coolInputValueAsNumber > 32 ) {
       errorSpan.style.display = "block";
       errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
     }
+    else if ( warmInputValueAsNumber < 10 || warmInputValueAsNumber > 32 ) {
+      errorSpan.style.display = "block";
+      errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
+    }
+    else {
     // Validation passed
     // Set current room's presets
+    errorSpan.style.display = "none"
     const currRoom = rooms.find((room) => room.name === selectedRoom);
 
-    currRoom.setColdPreset(coolInput.value);
-    currRoom.setWarmPreset(warmInput.value);
+    currRoom.setColdPreset(coolInputValueAsNumber);
+    currRoom.setWarmPreset(warmInputValueAsNumber);
 
-    coolInput.value = "";
-    warmInput.value = "";
+
+    // coolInput.value = "";
+    // warmInput.value = "";
+
+
   }
+
+    // Validation passed
+    // Set current room's presets
+    // const currRoom = rooms.find((room) => room.name === selectedRoom);
+
+    // currRoom.setColdPreset(coolInput.value);
+    // currRoom.setWarmPreset(warmInput.value);
+
+    // coolInput.value = "";
+    // warmInput.value = "";
+
+  }
+  else {
+    errorSpan.style.display = "block";
+    errorSpan.innerText = "Enter values for both warm and cold presets";
+  }
+
 });
+
+
 
 
 // Rooms Control
@@ -401,7 +475,7 @@ const generateRooms = () => {
          
           <span class="room-status" style="display: ${
             room.airConditionerOn ? "" : "none"
-          }">${room.currTemp > 25 ? "Cooling room to: " : "Warming room to: "}${
+          }">${room.currTemp < 25 ? "Cooling room to: " : "Warming room to: "}${  // setting text description to communicate reasonable feedback
       room.currTemp
     }°</span>
         </div>
