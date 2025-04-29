@@ -29,12 +29,15 @@ const rooms = [
     increaseTemp() {
       this.currTemp++;
     },
+
     toggleAircon() {
       this.airConditionerOn
         ? (this.airConditionerOn = false)
         : (this.airConditionerOn = true);
     },
   },
+
+
   {
     name: "Kitchen",
     currTemp: 29,
@@ -64,12 +67,15 @@ const rooms = [
     increaseTemp() {
       this.currTemp++;
     },
+
     toggleAircon() {
       this.airConditionerOn
         ? (this.airConditionerOn = false)
         : (this.airConditionerOn = true);
     },
   },
+
+
   {
     name: "Bathroom",
     currTemp: 30,
@@ -105,6 +111,8 @@ const rooms = [
         : (this.airConditionerOn = true);
     },
   },
+
+
   {
     name: "Bedroom",
     currTemp: 31,
@@ -142,33 +150,42 @@ const rooms = [
   },
 ];
 
+
 const warmOverlay= `linear-gradient(
     to bottom,
     rgba(141, 158, 247, 0.2),
     rgba(194, 197, 215, 0.1)
   )`;
 
+
 const coolOverlay = `linear-gradient(to bottom, rgba(236, 96, 98, 0.2), rgba(248, 210, 211, 0.13))`;
+
 
 const setInitialOverlay = () => {
   document.querySelector(
     ".room"
   ).style.backgroundImage = `url('${rooms[0].image}')`;
 
+
   document.querySelector(".room").style.backgroundImage = `${
     rooms[0].currTemp < 25 ? coolOverlay : warmOverlay
   }, url('${rooms[0].image}')`;
 };
 
+
+// sets current room image.
 const setOverlay = (room) => {
   document.querySelector(".room").style.backgroundImage = `${
     room.currTemp < 25 ? coolOverlay : warmOverlay
   }, url('${room.image}')`;
 };
 
+
 // Set svg accordingly
 const svgPoint = document.querySelector(".point");
 const angleOffset = 86;
+
+
 const calculatePointPosition = (currTemp) => {
   const normalizedTemp = (currTemp - 10) / (32 - 10);
   const angle = normalizedTemp * 180 + angleOffset;
@@ -182,10 +199,14 @@ const calculatePointPosition = (currTemp) => {
   return { translateX, translateY };
 };
 
+
+
 const setIndicatorPoint = (currTemp) => {
   const position = calculatePointPosition(currTemp);
   svgPoint.style.transform = `translate(${position.translateX}px, ${position.translateY}px)`;
 };
+
+
 
 // Handle the dropdown data
 const roomSelect = document.getElementById("rooms");
@@ -200,6 +221,8 @@ currentTemp.textContent = `${rooms[0].currTemp}°`;
 setInitialOverlay();
 
 document.querySelector(".currentTemp").innerText = `${rooms[0].currTemp}°`;
+
+
 // Add new options from rooms array
 rooms.forEach((room) => {
   const option = document.createElement("option");
@@ -208,10 +231,13 @@ rooms.forEach((room) => {
   roomSelect.appendChild(option);
 });
 
-// Set current temperature to currently selected room
 
+// Set current temperature to currently selected room
 const setSelectedRoom = (selectedRoom) => {
-  const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
+  const room = rooms.find((currRoom) => currRoom.name === selectedRoom );
+  console.log( "selected room:", room )
+
+
   setIndicatorPoint(room.currTemp);
 
   //   set the current stats to current room temperature
@@ -226,10 +252,19 @@ const setSelectedRoom = (selectedRoom) => {
   document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
 };
 
-roomSelect.addEventListener("change", function () {
-  selectedRoom = this.value;
+
+
+
+roomSelect.addEventListener("change", function ( event ) {
+  // bug 1: selected room was initially returning an object. I had to retrieve
+  // the text of actual room using event delegation and correctly pass it to selectedRoom
+  // identified with console.log.
+  selectedRoom = event.target.options[event.target.selectedIndex].innerText;
+  // console.log("selected room:", selectedRoom)
 
   setSelectedRoom(selectedRoom);
+
+  
 });
 
 
@@ -237,10 +272,14 @@ roomSelect.addEventListener("change", function () {
 const defaultSettings = document.querySelector(".default-settings");
 defaultSettings.addEventListener("click", function (e) {});
 
+
+
 // Increase and decrease temperature
 document.getElementById("increase").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
-  const increaseRoomTemperature = room.increaseTemp;
+
+  // same error as was the case in reduce temp
+  const increaseRoomTemperature = room.increaseTemp.bind(room);
 
   if (room.currTemp < 32) {
     increaseRoomTemperature();
@@ -259,9 +298,18 @@ document.getElementById("increase").addEventListener("click", () => {
   document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
 });
 
+
+
+
 document.getElementById("reduce").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
-  const decreaseRoomTemperature = room.decreaseTemp;
+  console.log("room from btn click:", selectedRoom)
+
+  // room.decreaseTemp was being called but it was not binding to the actual
+  // room, so 'this' inside decreaseTemp was undefined and calling the 
+  // decreaseTemp function did not update the temperature.
+  const decreaseRoomTemperature = room.decreaseTemp.bind(room);
+  console.log("decrease room temp:", decreaseRoomTemperature )
 
   if (room.currTemp > 10) {
     decreaseRoomTemperature();
@@ -280,6 +328,8 @@ document.getElementById("reduce").addEventListener("click", () => {
   document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
 });
 
+
+
 const coolBtn = document.getElementById("cool");
 const warmBtn = document.getElementById("warm");
 
@@ -292,10 +342,12 @@ document.getElementById("newPreset").addEventListener("click", () => {
   }
 });
 
+
 // close inputs
 document.getElementById("close").addEventListener("click", () => {
   inputsDiv.classList.add("hidden");
 });
+
 
 // handle preset input data
 document.getElementById("save").addEventListener("click", () => {
@@ -325,6 +377,7 @@ document.getElementById("save").addEventListener("click", () => {
     warmInput.value = "";
   }
 });
+
 
 // Rooms Control
 // Generate rooms
@@ -357,6 +410,9 @@ const generateRooms = () => {
 
   roomsControlContainer.innerHTML = roomsHTML;
 };
+
+
+
 const displayTime = (room) => {
   return `
       <div class="time-display">
@@ -401,6 +457,7 @@ const displayTime = (room) => {
 }
 
 generateRooms();
+
 
 document.querySelector(".rooms-control").addEventListener("click", (e) => {
   if (e.target.classList.contains("switch")) {
