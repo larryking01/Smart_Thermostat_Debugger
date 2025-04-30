@@ -369,6 +369,102 @@ svg.point {
   padding-left: 10px; /* Add spacing between times */
 }
 
+
+
+
+/* toggle modal button styles */
+.toggle-modal-btn {
+  cursor: pointer;
+}
+
+
+.hide-modal {
+  display: none
+}
+
+
+.show-modal {
+    position: fixed;            
+    top: 7%;
+    left: 30%;
+    /* transform: translate(-50%, -50%);   */
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10000;              /* Ensure it's above other content */
+    border-radius: 8px;
+    width: 30rem;
+    /* max-width: 500px; */
+    /* display: flex;
+    flex-direction: column; */
+    display: flex;
+    flex-direction: column;
+    
+    
+}
+
+
+.room-input {
+  width: 100%;
+}
+
+
+.add-room-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+
+.close-modal-btn {
+  font-weight: bold;
+  color: red;
+  cursor: pointer
+}
+
+
+.room-input {
+  margin-bottom: 1.3rem;
+  height: 2.2rem;
+  padding: 0.5rem;
+  /* border-radius: 0.3rem; */
+
+}
+
+
+.add-room-btn {
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 2.2rem;
+  background-color: var(--text-primary);
+  color: white;
+  border-radius: 0.625rem;
+}
+
+.add-room-btn:hover {
+  background-color: black;
+}
+
+
+/* .room-input::placeholder {
+  text-align: center;
+} */
+
+label {
+  font-size: 0.9rem;
+  color: #ec6062
+}
+
+
+
+
+
+
+
+
+
+
 @media only screen and (max-width: 470px) {
   .container {
     width: 360px;

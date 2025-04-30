@@ -1,5 +1,6 @@
 // Room objects
-const rooms = [
+// bug: room being constant disallows new rooms to be added.
+let rooms = [
   {
     name: "Living Room",
     currTemp: 32,
@@ -147,6 +148,7 @@ const rooms = [
         : (this.airConditionerOn = true);
     },
   },
+
 ];
 
 
@@ -570,3 +572,170 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
   //   setSelectedRoom(e.target.parentNode.parentNode.id);
   // }
 });
+
+
+
+
+// handling the modal 
+let openModalBtn = document.querySelector(".open-modal-btn")
+let modalDiv = document.getElementById("modal-div")
+
+
+openModalBtn.addEventListener("click", function () {
+  if( modalDiv ) {
+    console.log("modal div class list", modalDiv.classList )
+
+    if( modalDiv.classList.contains("hide-modal")) {
+      modalDiv.classList.replace("hide-modal", "show-modal")
+      modalDiv.innerHTML = `
+        <div>
+            <div class="add-room-header">
+              <h3>Add new room</h3>
+              <p class="close-modal-btn" onclick="alert("i am the close")">Close</p>
+            </div>
+
+            <form class="add-room-form">
+              <label for="room name input">Enter room name *</label>
+              <input type="text" name="room name input" id="room name input" required class="room-input">
+
+              
+              <label for="current temp input">Enter preferred temperature *</label>
+              <input type="text" name="current temp input" id="current temp input" required class="room-input">
+
+              
+              <label for="warm preset input">Enter warm preset *</label>
+              <input type="text" name="warm preset input" id="warm preset input" required class="room-input">
+
+              
+              <label for="current temp input">Enter cool preset *</label>
+              <input type="text" name="cool preset input" id="cool preset input" required class="room-input">
+
+              
+              <label for="start time input">Set automatic cooling start time *</label>
+              <input type="time" name="start time input" id="start time input" required class="room-input">
+
+              
+              <label for="end time input">Set automatic cooling end time *</label>
+              <input type="time" name="end time input" id="end time input" required class="room-input">
+
+
+              <button type="submit" class="add-room-btn"> Add room </button>
+            </form>
+        </div>
+      `;
+
+      // close the modal dialog
+      const closeModalBtn = document.querySelector(".close-modal-btn")
+      if( closeModalBtn ) {
+        closeModalBtn.addEventListener("click", function () {
+            modalDiv.classList.replace("show-modal", "hide-modal")
+        })
+      }
+
+
+
+      // handle submit button
+      const addNewRoomBtn = document.querySelector(".add-room-btn") 
+      addNewRoomBtn.addEventListener("click", function( e ) {
+        e.preventDefault()
+        alert("room added")
+
+        // getting the values of all input elements
+        const roomNameInput = document.getElementById("room name input")
+        const currentTempInput = document.getElementById("current temp input")
+        const warmPresetInput = document.getElementById("warm preset input")
+        const coldPresetInput = document.getElementById("cool preset input")
+        const startTimeInput = document.getElementById("start time input")
+        const endTimeInput = document.getElementById("end time input")
+
+        // console.log("room name: ", roomNameInput.value )
+        // console.log("current temp:", currentTempInput.value)
+        // console.log("warm preset:", warmPresetInput.value)
+        // console.log("cold preset:", coldPresetInput.value)
+        // console.log("start time", startTimeInput.value)
+        // console.log("end time", endTimeInput.value)
+
+
+
+        // adding a room.
+        const newRoom = {
+              name: roomNameInput.value.trim(),
+              currTemp: Math.round( currentTempInput.value ),
+              coldPreset: Math.round( coldPresetInput.value ),
+              warmPreset: Math.round( warmPresetInput.value ),
+              image: "./assets/living-room.jpg",
+              airConditionerOn: false,
+              startTime: startTimeInput.value.trim(),
+              endTime: endTimeInput.value.trim(),
+          
+              setCurrTemp(temp) {
+                this.currTemp = temp;
+              },
+          
+              setColdPreset(newCold) {
+                this.coldPreset = newCold;
+              },
+          
+              setWarmPreset(newWarm) {
+                this.warmPreset = newWarm;
+              },
+          
+              decreaseTemp() {
+                this.currTemp--;
+              },
+          
+              increaseTemp() {
+                this.currTemp++;
+              },
+          
+              toggleAircon() {
+                this.airConditionerOn
+                  ? (this.airConditionerOn = false)
+                  : (this.airConditionerOn = true);
+              },
+           }
+
+      
+      console.log("new room = ", newRoom )
+
+      
+      const updatedRooms = [ ...rooms, newRoom ]
+      rooms = updatedRooms
+      generateRooms()
+      alert("room added")
+      modalDiv.classList.replace("show-modal", "hide-modal")
+
+      // resetting inputs 
+
+      // updating select to display new room
+      roomSelect.innerHTML = ""
+      rooms.forEach(( room ) => {
+        const option = document.createElement("option")
+        option.value = room.name
+        option.textContent = room.name
+        roomSelect.appendChild( option )
+      })
+
+
+
+
+
+
+
+
+
+      })
+
+
+
+    }
+    else {
+      // do nothing
+    }
+  }
+  else {
+    // do nothing
+  }
+
+})
+
