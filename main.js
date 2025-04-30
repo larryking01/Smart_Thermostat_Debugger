@@ -37,7 +37,6 @@ const rooms = [
     },
   },
 
-
   {
     name: "Kitchen",
     currTemp: 29,
@@ -226,6 +225,7 @@ currentTemp.textContent = `${rooms[0].currTemp}°`;
 
 setInitialOverlay();
 
+// check current temp at title/top
 document.querySelector(".currentTemp").innerText = `${rooms[0].currTemp}°`;
 
 
@@ -239,11 +239,11 @@ rooms.forEach((room) => {
 
 
 // Set current temperature to currently selected room
-const setSelectedRoom = (selectedRoom) => {
-  const room = rooms.find((currRoom) => currRoom.name === selectedRoom );
-  // console.log( "selected room:", room )
+const setSelectedRoom = (selectedRoomParam) => {
+  const room = rooms.find((currRoom) => currRoom.name === selectedRoomParam );
+  console.log( "selected room:", room )
 
-
+  selectedRoom = room.name;
   setIndicatorPoint(room.currTemp);
 
   //   set the current stats to current room temperature
@@ -288,14 +288,37 @@ defaultSettings.addEventListener("click", function (e) {
   if( e.target.id === "cool" ) {
     let updateTemperatureWithColdPreset = room.setCurrTemp.bind( room )
     updateTemperatureWithColdPreset( room.coldPreset )
-    currentTemp.textContent = `${rooms[0].currTemp}°`;
+
+    currentTemp.textContent = `${room.currTemp}°`;
+
+    // updating temp at header
+    document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
     setOverlay( room )
+
+    
+    // generate rooms
+    // bug 8: current temperature in generate rooms column was not updating when preset was
+    // clicked to display because generateRooms was not being called.
+    generateRooms()
   }
   else if( e.target.id === "warm" ) {
     let updateTemperatureWithWarmPreset = room.setCurrTemp.bind( room )
     updateTemperatureWithWarmPreset( room.warmPreset )
-    currentTemp.textContent = `${rooms[0].currTemp}°`;
+
+    // bug 10: current temperature was displaying undefined when warm preset was called
+    currentTemp.textContent = `${room.currTemp}°`;
+
+    // updating temp at header
+    // bug 9: current temperature at header section was not updating to match displayed 
+    // cold preset
+    document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
     setOverlay( room )
+
+    // generate rooms
+    // bug 8: current temperature in generate rooms column was not updating when preset was
+    // clicked to display because generateRooms was not being called.
+    generateRooms()
+
   }
   else {
     //
@@ -309,10 +332,15 @@ document.getElementById("increase").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
 
   // same error as was the case in reduce temp
-  const increaseRoomTemperature = room.increaseTemp.bind(room);
+  // const increaseRoomTemperature = room.increaseTemp.bind(room);
+
+
+  // const increaseRoomTemperature = room.increaseTemp;
+
 
   if (room.currTemp < 32) {
-    increaseRoomTemperature();
+    room.increaseTemp();
+    // console.log(`gggggggggggg`,increaseRoomTemp)
   }
 
   setIndicatorPoint(room.currTemp);
@@ -377,6 +405,11 @@ document.getElementById("newPreset").addEventListener("click", () => {
 
 // close inputs
 document.getElementById("close").addEventListener("click", () => {
+
+  // bug: error span shows previous error message when selected.
+  const errorSpan = document.querySelector(".error");
+  errorSpan.textContent = ""
+  
   inputsDiv.classList.add("hidden");
 });
 
@@ -390,62 +423,47 @@ document.getElementById("save").addEventListener("click", () => {
 
   if (coolInput.value && warmInput.value) {
     // Validate the data
-    let coolInputValueAsNumber = Number.parseInt( coolInput.value )
-    let warmInputValueAsNumber = Number.parseInt( warmInput.value )
+    // bug 11. using Math.round to get the correct estimate for the
+    // temperature in case a user enters a decimal
+    let coolInputValueAsNumber = Math.round( coolInput.value )
+    let warmInputValueAsNumber = Math.round( warmInput.value )
 
-    console.log("cool input value = ", coolInputValueAsNumber )
-    console.log("warm input value = ", warmInputValueAsNumber )
+    // console.log("cool input value = ", coolInput.value )
+    // console.log("warm input value = ", warmInput.value )
 
-    // default presets range = 10 - 32
+    // console.log("cool input value as number= ", coolInputValueAsNumber )
+    // console.log("warm input value as number = ", warmInputValueAsNumber )
 
-    // if (coolInput.value < 10 || coolInput.value > 25) {
-    //   errorSpan.style.display = "block";
-    //   errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
-    // }
-
-    // if (warmInput.value < 25 || warmInput.value > 32) {
-    //   errorSpan.style.display = "block";
-    //   errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
-    // }
     
-    if( coolInputValueAsNumber < 10 || coolInputValueAsNumber > 32 ) {
+    if( coolInputValueAsNumber < 10 || coolInputValueAsNumber > 25 ) {
       errorSpan.style.display = "block";
-      errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
+      errorSpan.innerText = "Enter valid cool temperatures (10° - 24°)";
     }
-    else if ( warmInputValueAsNumber < 10 || warmInputValueAsNumber > 32 ) {
+    else if ( warmInputValueAsNumber < 25 || warmInputValueAsNumber > 32 ) {
       errorSpan.style.display = "block";
-      errorSpan.innerText = "Enter valid temperatures (10° - 32°)";
+      errorSpan.innerText = "Enter valid warm temperatures (25° - 32°)";
     }
     else {
     // Validation passed
     // Set current room's presets
+    errorSpan.innerText = ""
     errorSpan.style.display = "none"
     const currRoom = rooms.find((room) => room.name === selectedRoom);
 
     currRoom.setColdPreset(coolInputValueAsNumber);
     currRoom.setWarmPreset(warmInputValueAsNumber);
 
+    // generateRooms()
 
-    // coolInput.value = "";
-    // warmInput.value = "";
-
+    coolInput.value = "";
+    warmInput.value = "";
 
   }
-
-    // Validation passed
-    // Set current room's presets
-    // const currRoom = rooms.find((room) => room.name === selectedRoom);
-
-    // currRoom.setColdPreset(coolInput.value);
-    // currRoom.setWarmPreset(warmInput.value);
-
-    // coolInput.value = "";
-    // warmInput.value = "";
 
   }
   else {
     errorSpan.style.display = "block";
-    errorSpan.innerText = "Enter values for both warm and cold presets";
+    errorSpan.innerText = "Enter numeric values for both warm and cold presets";
   }
 
 });
@@ -539,10 +557,16 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
       (room) => room.name === e.target.parentNode.parentNode.id
     );
     room.toggleAircon();
+    setSelectedRoom(e.target.parentNode.parentNode.id);
+
+    // selectedRoom = e.target.parentNode.parentNode.id;
+
+    console.log(`qqqqq`,selectedRoom)
     generateRooms();
   }
 
-  if (e.target.classList.contains("room-name")) {
-    setSelectedRoom(e.target.parentNode.parentNode.id);
-  }
+  // bug 12: the selected room was not updating accurately in room view and layout.
+  // if (e.target.classList.contains("room-name")) {
+  //   setSelectedRoom(e.target.parentNode.parentNode.id);
+  // }
 });
