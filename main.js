@@ -591,24 +591,26 @@ openModalBtn.addEventListener("click", function () {
         <div>
             <div class="add-room-header">
               <h3>Add new room</h3>
-              <p class="close-modal-btn" onclick="alert("i am the close")">Close</p>
+              <p class="close-modal-btn">Close</p>
             </div>
 
             <form class="add-room-form">
+              <p class="hide-error-info"></p>
+
               <label for="room name input">Enter room name *</label>
               <input type="text" name="room name input" id="room name input" required class="room-input">
 
               
               <label for="current temp input">Enter preferred temperature *</label>
-              <input type="text" name="current temp input" id="current temp input" required class="room-input">
+              <input type="number" min="10" max="32" step="1" name="current temp input" id="current temp input" required class="room-input">
 
               
               <label for="warm preset input">Enter warm preset *</label>
-              <input type="text" name="warm preset input" id="warm preset input" required class="room-input">
+              <input type="number" min="25" max="32" step="1" name="warm preset input" id="warm preset input" required class="room-input">
 
               
               <label for="current temp input">Enter cool preset *</label>
-              <input type="text" name="cool preset input" id="cool preset input" required class="room-input">
+              <input type="number" min="10" max="24" step="1" name="cool preset input" id="cool preset input" required class="room-input">
 
               
               <label for="start time input">Set automatic cooling start time *</label>
@@ -636,9 +638,9 @@ openModalBtn.addEventListener("click", function () {
 
       // handle submit button
       const addNewRoomBtn = document.querySelector(".add-room-btn") 
+      const errorInfo = document.querySelector(".hide-error-info")
       addNewRoomBtn.addEventListener("click", function( e ) {
         e.preventDefault()
-        alert("room added")
 
         // getting the values of all input elements
         const roomNameInput = document.getElementById("room name input")
@@ -648,64 +650,60 @@ openModalBtn.addEventListener("click", function () {
         const startTimeInput = document.getElementById("start time input")
         const endTimeInput = document.getElementById("end time input")
 
-        // console.log("room name: ", roomNameInput.value )
-        // console.log("current temp:", currentTempInput.value)
-        // console.log("warm preset:", warmPresetInput.value)
-        // console.log("cold preset:", coldPresetInput.value)
-        // console.log("start time", startTimeInput.value)
-        // console.log("end time", endTimeInput.value)
-
-
-
+        if( roomNameInput.value.trim().length < 1 ) {
+          errorInfo.classList.replace("hide-error-info", "show-error-info")
+          errorInfo.innerText = "Enter a room name"
+        }
+        else {
         // adding a room.
         const newRoom = {
-              name: roomNameInput.value.trim(),
-              currTemp: Math.round( currentTempInput.value ),
-              coldPreset: Math.round( coldPresetInput.value ),
-              warmPreset: Math.round( warmPresetInput.value ),
-              image: "./assets/living-room.jpg",
-              airConditionerOn: false,
-              startTime: startTimeInput.value.trim(),
-              endTime: endTimeInput.value.trim(),
-          
-              setCurrTemp(temp) {
-                this.currTemp = temp;
-              },
-          
-              setColdPreset(newCold) {
-                this.coldPreset = newCold;
-              },
-          
-              setWarmPreset(newWarm) {
-                this.warmPreset = newWarm;
-              },
-          
-              decreaseTemp() {
-                this.currTemp--;
-              },
-          
-              increaseTemp() {
-                this.currTemp++;
-              },
-          
-              toggleAircon() {
-                this.airConditionerOn
-                  ? (this.airConditionerOn = false)
-                  : (this.airConditionerOn = true);
-              },
-           }
+          name: roomNameInput.value.trim(),
+          currTemp: Math.round( currentTempInput.value ),
+          coldPreset: Math.round( coldPresetInput.value ),
+          warmPreset: Math.round( warmPresetInput.value ),
+          image: "./assets/living-room.jpg",
+          airConditionerOn: false,
+          startTime: startTimeInput.value.trim(),
+          endTime: endTimeInput.value.trim(),
+      
+          setCurrTemp(temp) {
+            this.currTemp = temp;
+          },
+      
+          setColdPreset(newCold) {
+            this.coldPreset = newCold;
+          },
+      
+          setWarmPreset(newWarm) {
+            this.warmPreset = newWarm;
+          },
+      
+          decreaseTemp() {
+            this.currTemp--;
+          },
+      
+          increaseTemp() {
+            this.currTemp++;
+          },
+      
+          toggleAircon() {
+            this.airConditionerOn
+              ? (this.airConditionerOn = false)
+              : (this.airConditionerOn = true);
+          },
+       }
+
+
+       console.log("new room = ", newRoom )
 
       
-      console.log("new room = ", newRoom )
-
-      
-      const updatedRooms = [ ...rooms, newRoom ]
-      rooms = updatedRooms
-      generateRooms()
-      alert("room added")
-      modalDiv.classList.replace("show-modal", "hide-modal")
-
-      // resetting inputs 
+       const updatedRooms = [ ...rooms, newRoom ]
+       rooms = updatedRooms
+       generateRooms()
+       // alert("room added")
+       modalDiv.classList.replace("show-modal", "hide-modal")
+ 
+       // resetting inputs 
 
       // updating select to display new room
       roomSelect.innerHTML = ""
@@ -719,14 +717,10 @@ openModalBtn.addEventListener("click", function () {
 
 
 
-
-
-
+    }
 
 
       })
-
-
 
     }
     else {

@@ -11,6 +11,8 @@
   --cool-blue: #4458c3;
   --warm-red: #ec6062;
   --accent: #ffd7a8;
+  --btn-primary-bg: #515155;
+  --btn-secondary-bg: #141414;
 }
 
 body,
@@ -418,8 +420,13 @@ svg.point {
 
 .close-modal-btn {
   font-weight: bold;
+  color: #ff5252;
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.close-modal-btn:hover {
   color: red;
-  cursor: pointer
 }
 
 
@@ -440,10 +447,11 @@ svg.point {
   background-color: var(--text-primary);
   color: white;
   border-radius: 0.625rem;
+  transition: background-color 0.3s ease;
 }
 
 .add-room-btn:hover {
-  background-color: black;
+  background-color: var(--btn-secondary-bg);
 }
 
 
@@ -453,8 +461,50 @@ svg.point {
 
 label {
   font-size: 0.9rem;
-  color: #ec6062
+  /* color: #ec6062 */
+  color: var(--text-primary)
 }
+
+
+.open-modal-btn {
+  border: none;
+  /* background-color: #4458c3; */
+  background-color: var(--text-primary);
+  color: white;
+  padding: 0.4rem;
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.8rem;
+}
+
+
+.open-modal-btn:hover {
+  background-color: var(--btn-secondary-bg);
+}
+
+
+
+.hide-error-info {
+  display: none
+}
+
+
+.show-error-info {
+  color: red;
+  display: block
+}
+
+
+.error-border {
+  border: 2px solid red;
+}
+
+
+
+
+
+
 
 
 
