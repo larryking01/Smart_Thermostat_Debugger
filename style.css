@@ -431,12 +431,20 @@ svg.point {
 
 
 .room-input {
+  /* all: unset; */
+  border: none;
+  border: 1px solid var(--btn-secondary-bg);
   margin-bottom: 1.3rem;
   height: 2.2rem;
   padding: 0.5rem;
-  /* border-radius: 0.3rem; */
+  border-radius: 0.3rem;
 
 }
+
+/* .room-input:focus {
+  border: none;
+  border: 2px solid var(--cool-blue);
+} */
 
 
 .add-room-btn {
@@ -460,7 +468,7 @@ svg.point {
 } */
 
 label {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   /* color: #ec6062 */
   color: var(--text-primary)
 }
