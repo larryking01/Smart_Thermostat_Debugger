@@ -36,6 +36,13 @@ let rooms = [
         ? (this.airConditionerOn = false)
         : (this.airConditionerOn = true);
     },
+
+    // bug: adding additional clase to turn all ACs on
+    turnAllAirconOn() {
+      this.airConditionerOn
+        ? ( this.airConditionerOn = true )
+        : ( this.airConditionerOn = true )
+    }
   },
 
   {
@@ -73,6 +80,14 @@ let rooms = [
         ? (this.airConditionerOn = false)
         : (this.airConditionerOn = true);
     },
+
+    // bug: adding additional clase to turn all ACs on
+    turnAllAirconOn() {
+      this.airConditionerOn
+        ? ( this.airConditionerOn = true )
+        : ( this.airConditionerOn = true )
+    }
+    
   },
 
 
@@ -105,11 +120,20 @@ let rooms = [
     increaseTemp() {
       this.currTemp++;
     },
+
     toggleAircon() {
       this.airConditionerOn
         ? (this.airConditionerOn = false)
         : (this.airConditionerOn = true);
     },
+
+    // bug: adding additional clase to turn all ACs on
+    turnAllAirconOn() {
+      this.airConditionerOn
+        ? ( this.airConditionerOn = true )
+        : ( this.airConditionerOn = true )
+    }
+    
   },
 
 
@@ -147,6 +171,14 @@ let rooms = [
         ? (this.airConditionerOn = false)
         : (this.airConditionerOn = true);
     },
+
+    // bug: adding additional clase to turn all ACs on
+    turnAllAirconOn() {
+      this.airConditionerOn
+        ? ( this.airConditionerOn = true )
+        : ( this.airConditionerOn = true )
+    }
+    
   },
 
 ];
@@ -337,9 +369,6 @@ document.getElementById("increase").addEventListener("click", () => {
   // const increaseRoomTemperature = room.increaseTemp.bind(room);
 
 
-  // const increaseRoomTemperature = room.increaseTemp;
-
-
   if (room.currTemp < 32) {
     room.increaseTemp();
     // console.log(`gggggggggggg`,increaseRoomTemp)
@@ -477,7 +506,9 @@ document.getElementById("save").addEventListener("click", () => {
 // Generate rooms
 const generateRooms = () => {
   const roomsControlContainer = document.querySelector(".rooms-control");
-  let roomsHTML = "";
+
+  // bug: modifying starter roomHTML code to include button to turn on all ACs
+  let roomsHTML = `<button class="turn-all-acs-on">Turn All ACs On</button>`;
 
   rooms.forEach((room) => {
     roomsHTML += `
@@ -553,13 +584,15 @@ const displayTime = (room) => {
 generateRooms();
 
 
+
 document.querySelector(".rooms-control").addEventListener("click", (e) => {
   if (e.target.classList.contains("switch")) {
     const room = rooms.find(
       (room) => room.name === e.target.parentNode.parentNode.id
     );
-    room.toggleAircon();
+
     setSelectedRoom(e.target.parentNode.parentNode.id);
+    room.toggleAircon();
 
     // selectedRoom = e.target.parentNode.parentNode.id;
 
@@ -571,6 +604,22 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
   // if (e.target.classList.contains("room-name")) {
   //   setSelectedRoom(e.target.parentNode.parentNode.id);
   // }
+
+  // checking if turn all ACs button was clicked then turning on all ACs
+  if( e.target.classList.contains("turn-all-acs-on")) {
+    // alert("turn all acs on btn clicked")
+    rooms.forEach(( room ) => {
+      room.turnAllAirconOn()
+    })
+
+    generateRooms()
+
+
+  }
+
+
+
+
 });
 
 
@@ -691,6 +740,12 @@ openModalBtn.addEventListener("click", function () {
               ? (this.airConditionerOn = false)
               : (this.airConditionerOn = true);
           },
+
+          turnAllAirconOn() {
+            this.airConditionerOn
+              ? ( this.airConditionerOn = true )
+              : ( this.airConditionerOn = true )
+          }
        }
 
 
