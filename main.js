@@ -275,72 +275,19 @@ roomSelect.addEventListener("change", function ( event ) {
 
 // Set preset temperatures
 const defaultSettings = document.querySelector(".default-settings");
-defaultSettings.addEventListener("click", function (e) {
-  console.log( "selected room from default settings = ", selectedRoom )
-  const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
-
-  console.log( room )
-
-
-  // console.log( e.target.id )
-  // bug fix: used event delegation to correctly update temperature with
-  // warm and cold presets
-  if( e.target.id === "cool" ) {
-    let updateTemperatureWithColdPreset = room.setCurrTemp.bind( room )
-    updateTemperatureWithColdPreset( room.coldPreset )
-
-    currentTemp.textContent = `${room.currTemp}°`;
-
-    // updating temp at header
-    document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
-    setOverlay( room )
-
-    
-    // generate rooms
-    // bug 8: current temperature in generate rooms column was not updating when preset was
-    // clicked to display because generateRooms was not being called.
-    generateRooms()
-  }
-  else if( e.target.id === "warm" ) {
-    let updateTemperatureWithWarmPreset = room.setCurrTemp.bind( room )
-    updateTemperatureWithWarmPreset( room.warmPreset )
-
-    // bug 10: current temperature was displaying undefined when warm preset was called
-    currentTemp.textContent = `${room.currTemp}°`;
-
-    // updating temp at header
-    // bug 9: current temperature at header section was not updating to match displayed 
-    // cold preset
-    document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
-    setOverlay( room )
-
-    // generate rooms
-    // bug 8: current temperature in generate rooms column was not updating when preset was
-    // clicked to display because generateRooms was not being called.
-    generateRooms()
-
-  }
-  else {
-    //
-  }
-
-});
+defaultSettings.addEventListener("click", function (e) {});
 
 
 // Increase and decrease temperature
 document.getElementById("increase").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
 
-  // same error as was the case in reduce temp
-  // const increaseRoomTemperature = room.increaseTemp.bind(room);
-
-
-  // const increaseRoomTemperature = room.increaseTemp;
-
-
+  // const increaseRoomTemperature = room.increaseTemp
+  
   if (room.currTemp < 32) {
+    // increaseRoomTemperature() 
     room.increaseTemp();
-    // console.log(`gggggggggggg`,increaseRoomTemp)
+
   }
 
   setIndicatorPoint(room.currTemp);
@@ -361,16 +308,15 @@ document.getElementById("increase").addEventListener("click", () => {
 
 document.getElementById("reduce").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
-  // console.log("room from btn click:", selectedRoom)
 
-  // room.decreaseTemp was being called but it was not binding to the actual
-  // room, so 'this' inside decreaseTemp was undefined and calling the 
-  // decreaseTemp function did not update the temperature.
-  const decreaseRoomTemperature = room.decreaseTemp.bind(room);
-  // console.log("decrease room temp:", decreaseRoomTemperature )
+  // const decreaseRoomTemperature = room.decreaseTemp;
 
   if (room.currTemp > 10) {
-    decreaseRoomTemperature();
+    // decreaseRoomTemperature();
+    // same as bug in increase
+    
+    room.decreaseTemp()
+
   }
 
   setIndicatorPoint(room.currTemp);
@@ -405,7 +351,6 @@ document.getElementById("newPreset").addEventListener("click", () => {
 
 // close inputs
 document.getElementById("close").addEventListener("click", () => {
-
   // bug: error span shows previous error message when selected.
   const errorSpan = document.querySelector(".error");
   errorSpan.textContent = ""
@@ -427,13 +372,6 @@ document.getElementById("save").addEventListener("click", () => {
     // temperature in case a user enters a decimal
     let coolInputValueAsNumber = Math.round( coolInput.value )
     let warmInputValueAsNumber = Math.round( warmInput.value )
-
-    // console.log("cool input value = ", coolInput.value )
-    // console.log("warm input value = ", warmInput.value )
-
-    // console.log("cool input value as number= ", coolInputValueAsNumber )
-    // console.log("warm input value as number = ", warmInputValueAsNumber )
-
     
     if( coolInputValueAsNumber < 10 || coolInputValueAsNumber > 25 ) {
       errorSpan.style.display = "block";
@@ -492,8 +430,8 @@ const generateRooms = () => {
           ${displayTime(room)}
          
           <span class="room-status" style="display: ${
-            room.airConditionerOn ? "" : "none"
-          }">${room.currTemp < 25 ? "Cooling room to: " : "Warming room to: "}${  // setting text description to communicate reasonable feedback
+            room.airConditionerOn ? "" : "none"}">
+          ${room.currTemp < 25 ? "Cooling room to: " : "Warming room to: "}${  // bug: wrong comparison operator used for setting feedback
       room.currTemp
     }°</span>
         </div>
