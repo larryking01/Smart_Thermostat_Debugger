@@ -508,7 +508,7 @@ const generateRooms = () => {
   const roomsControlContainer = document.querySelector(".rooms-control");
 
   // bug: modifying starter roomHTML code to include button to turn on all ACs
-  let roomsHTML = `<button class="turn-all-acs-on">Turn All ACs On</button>`;
+  let roomsHTML = `<button class="turn-all-acs-on" title="Turn all Acs on">Turn All ACs On</button>`;
 
   rooms.forEach((room) => {
     roomsHTML += `
@@ -640,7 +640,8 @@ openModalBtn.addEventListener("click", function () {
         <div>
             <div class="add-room-header">
               <h3>Add new room</h3>
-              <p class="close-modal-btn">Close</p>
+              <ion-icon name="close" class="close-modal-btn" size="large" title="Close modal">
+              </ion-icon>
             </div>
 
             <form class="add-room-form">
@@ -661,14 +662,8 @@ openModalBtn.addEventListener("click", function () {
               <label for="current temp input">Enter cool preset *</label>
               <input type="number" min="10" max="24" step="1" name="cool preset input" id="cool preset input" required class="room-input">
 
-              
-              <label for="start time input">Set automatic cooling start time *</label>
-              <input type="time" name="start time input" id="start time input" required class="room-input">
-
-              
-              <label for="end time input">Set automatic cooling end time *</label>
-              <input type="time" name="end time input" id="end time input" required class="room-input">
-
+              <label for="room image">Select room image *</label>
+              <input type="file" name="room image" id="room image" class="room-input" required >
 
               <button type="submit" class="add-room-btn"> Add room </button>
             </form>
@@ -696,8 +691,9 @@ openModalBtn.addEventListener("click", function () {
         const currentTempInput = document.getElementById("current temp input")
         const warmPresetInput = document.getElementById("warm preset input")
         const coldPresetInput = document.getElementById("cool preset input")
-        const startTimeInput = document.getElementById("start time input")
-        const endTimeInput = document.getElementById("end time input")
+        const roomImage = document.getElementById("room image")
+        // const startTimeInput = document.getElementById("start time input")
+        // const endTimeInput = document.getElementById("end time input")
 
         if( roomNameInput.value.trim().length < 1 ) {
           errorInfo.classList.replace("hide-error-info", "show-error-info")
@@ -712,8 +708,8 @@ openModalBtn.addEventListener("click", function () {
           warmPreset: Math.round( warmPresetInput.value ),
           image: "./assets/living-room.jpg",
           airConditionerOn: false,
-          startTime: startTimeInput.value.trim(),
-          endTime: endTimeInput.value.trim(),
+          startTime: "08:30 AM",
+          endTime: "12:00 PM",
       
           setCurrTemp(temp) {
             this.currTemp = temp;
@@ -750,6 +746,7 @@ openModalBtn.addEventListener("click", function () {
 
 
        console.log("new room = ", newRoom )
+       console.log(" room image = ", roomImage.value )
 
       
        const updatedRooms = [ ...rooms, newRoom ]

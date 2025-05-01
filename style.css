@@ -69,8 +69,30 @@ body {
   background: none;
   cursor: pointer;
   outline: none;
-  font-weight: 500;
+  font-weight: 700;
 }
+
+/* .open-modal-btn {
+  border: none;
+  background-color: var(--text-primary);
+  color: white;
+  padding: 0.1rem;
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+} */
+
+
+/* .open-modal-btn:hover {
+  background-color: var(--btn-secondary-bg);
+} */
+
+/* .add-circle:hover {
+  background-color: black;
+  color: white;
+  transition: background-color 0.3s ease;
+} */
+
 
 .info {
   text-align: center;
@@ -419,7 +441,6 @@ svg.point {
 
 
 .close-modal-btn {
-  font-weight: bold;
   color: #ff5252;
   cursor: pointer;
   transition: color 0.1s ease;
@@ -474,22 +495,6 @@ label {
 }
 
 
-.open-modal-btn {
-  border: none;
-  /* background-color: #4458c3; */
-  background-color: var(--text-primary);
-  color: white;
-  padding: 0.4rem;
-  border-radius: 0.625rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 0.8rem;
-}
-
-
-.open-modal-btn:hover {
-  background-color: var(--btn-secondary-bg);
-}
 
 
 
@@ -509,6 +514,21 @@ label {
 }
 
 
+
+.turn-all-acs-on {
+  border: none;
+  background-color: var(--btn-primary-bg);
+  color: white;
+  border-radius: 0.625rem;
+  padding: 0.3rem;
+  width: 7rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.turn-all-acs-on:hover {
+  background-color: #141414;
+}
 
 
 
