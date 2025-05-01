@@ -150,8 +150,7 @@ const rooms = [
 ];
 
 
-// bug 3. linear-gradient values for cool and warm overlays were swapped.
-// fixed it by reversing them.
+// bug linear-gradient values for cool and warm overlays were swapped.
 const warmOverlay= `linear-gradient(
     to bottom,
    rgba(236, 96, 98, 0.2),
@@ -262,11 +261,8 @@ const setSelectedRoom = (selectedRoomParam) => {
 
 
 roomSelect.addEventListener("change", function ( event ) {
-  // bug 1: selected room was initially returning an object. I had to retrieve
-  // the text of actual room using event delegation and correctly pass it to selectedRoom
-  // identified with console.log.
+  // bug 1: selected room was initially returning an object.
   selectedRoom = event.target.options[event.target.selectedIndex].innerText;
-  // console.log("selected room:", selectedRoom)
 
   setSelectedRoom(selectedRoom);
 
@@ -314,7 +310,7 @@ document.getElementById("reduce").addEventListener("click", () => {
   if (room.currTemp > 10) {
     // decreaseRoomTemperature();
     // same as bug in increase
-    
+
     room.decreaseTemp()
 
   }
@@ -368,7 +364,7 @@ document.getElementById("save").addEventListener("click", () => {
 
   if (coolInput.value && warmInput.value) {
     // Validate the data
-    // bug 11. using Math.round to get the correct estimate for the
+    // bug. using Math.round to get the correct estimate for the
     // temperature in case a user enters a decimal
     let coolInputValueAsNumber = Math.round( coolInput.value )
     let warmInputValueAsNumber = Math.round( warmInput.value )
@@ -503,7 +499,7 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     generateRooms();
   }
 
-  // bug 12: the selected room was not updating accurately in room view and layout.
+  // bug: the selected room was not updating accurately in room view and layout.
   // if (e.target.classList.contains("room-name")) {
   //   setSelectedRoom(e.target.parentNode.parentNode.id);
   // }

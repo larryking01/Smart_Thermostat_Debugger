@@ -3,7 +3,7 @@ This document outlines bugs identified in the starter code for the Smart Thermos
 
 # Bug 1
 File: main.js
-Line: 155 
+Line: 154 & 161
 Type: Logical Error
 
 Description: The warm and cold overlays for warm and cool temperatures were swapped
@@ -21,7 +21,7 @@ Solution: Swapping the "warmOverlay" and "coolOverlay" variables to match their
 
 # Bug 2
 File: main.js
-Line: 268
+Line: 267
 Type: Logical Error
 
 Description: "selectedRoom", inside the "roomSelect" event listener was initially being 
@@ -58,7 +58,7 @@ Solution: Calling the "room.increaseTemp" function directly so as not to lose th
 
 # Bug 4
 File: main.js
-Line: 318
+Line: 314
 Type: Logical Error
 Description: Same as in # Bug 3 above except with different variable and function names
 Identification: Same method as in # Bug 3 above
@@ -68,7 +68,7 @@ Solution: Same method as in # Bug 3 above
 
 # Bug 5
 File: main.js
-Line: 435 
+Line: 430 
 Type: Logical Error
 
 Description: When a room's AC is first turned on or updated there should be reasonable
@@ -80,5 +80,19 @@ Description: When a room's AC is first turned on or updated there should be reas
 Identification: Careful inspection of the logic
 
 Solution: Replacing the wrong ">" operator used with the correct "<" operator.
+
+
+
+
+# Bug 6
+File: main.js
+Line: 374 & 378
+Type: Logical error
+Description: "errorSpan" element, which displays errors when users enter values out of the
+              allowed range displayed the same error messages to users. The error message
+              was not tailored for the particular error that occurred.
+Identification: Careful inspection of errorSpan text in starter files.
+Solution: Modified the error message to be tailored to when cold presets are out of bounds
+          or warm presets are out of bounds.
 
 
