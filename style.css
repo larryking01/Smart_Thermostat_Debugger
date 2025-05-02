@@ -51,6 +51,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 4rem;
 }
 
 .top-content {
@@ -187,7 +188,7 @@ svg.point {
 }
 
 .inputs {
-  margin: 0 0 20px 0;
+  margin: 0 0 10px 0;
   /* border: solid 1px pink; */
   display: flex;
   align-items: center;
@@ -296,6 +297,20 @@ svg.point {
 .hidden {
   display: none;
 }
+
+
+.auto-schedule-header {
+  text-align: center;
+  color: #4458c3;
+  font-size: 1rem;
+}
+
+.timer-label {
+  font-weight: bold;
+  
+}
+
+
 
 .room {
   width: 100%;
@@ -535,19 +550,24 @@ label {
 .auto-schedule-div {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 
 .set-schedule-btn {
-  margin: 2rem auto 0 auto;
-  width: 100%;
+  margin: 2rem auto 0 6rem;
+  width: 50%;
   cursor: pointer;
   border: none;
   background-color: #515155;
   color: white;
   border-radius: 0.625rem;
-  padding: 0.4rem
+  padding: 0.4rem;
+  transition: background-color 0.3s ease;
+}
+
+.set-schedule-btn:hover {
+  background-color: #141414;
 }
 
 

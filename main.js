@@ -694,25 +694,14 @@ setInterval(() => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // handling the modal 
 let openModalBtn = document.querySelector(".open-modal-btn")
 let modalDiv = document.getElementById("modal-div")
+let errorSpan;
 
 
 openModalBtn.addEventListener("click", function () {
   if( modalDiv ) {
-    console.log("modal div class list", modalDiv.classList )
 
     if( modalDiv.classList.contains("hide-modal")) {
       modalDiv.classList.replace("hide-modal", "show-modal")
@@ -725,7 +714,7 @@ openModalBtn.addEventListener("click", function () {
             </div>
 
             <form class="add-room-form">
-              <p class="hide-error-info"></p>
+              <p class="error-info"></p>
 
               <label for="room name input">Enter room name *</label>
               <input type="text" name="room name input" id="room name input" required class="room-input">
@@ -743,8 +732,8 @@ openModalBtn.addEventListener("click", function () {
               <input type="number" min="10" max="24" step="1" name="cool preset input" id="cool preset input" required class="room-input">
 
               <label for="room image">Select room image *</label>
-              <input type="file" name="room image" id="room image" class="room-input" required >
-
+              <input type="file" name="room image" id="room image" class="room-input" accept="image/*" required >
+              
               <button type="submit" class="add-room-btn"> Add room </button>
             </form>
         </div>
@@ -759,12 +748,12 @@ openModalBtn.addEventListener("click", function () {
       }
 
 
-
       // handle submit button
-      const addNewRoomBtn = document.querySelector(".add-room-btn") 
-      const errorInfo = document.querySelector(".hide-error-info")
-      addNewRoomBtn.addEventListener("click", function( e ) {
-        e.preventDefault()
+      // const addNewRoomBtn = document.querySelector(".add-room-btn") 
+      const addRoomForm = document.querySelector(".add-room-form")
+      const errorInfo = document.querySelector(".error-info")
+
+      addRoomForm.addEventListener("submit", function( e ) {
 
         // getting the values of all input elements
         const roomNameInput = document.getElementById("room name input")
@@ -772,24 +761,43 @@ openModalBtn.addEventListener("click", function () {
         const warmPresetInput = document.getElementById("warm preset input")
         const coldPresetInput = document.getElementById("cool preset input")
         const roomImage = document.getElementById("room image")
-        // const startTimeInput = document.getElementById("start time input")
-        // const endTimeInput = document.getElementById("end time input")
+        
 
-        if( roomNameInput.value.trim().length < 1 ) {
-          errorInfo.classList.replace("hide-error-info", "show-error-info")
-          errorInfo.innerText = "Enter a room name"
+        e.preventDefault()
+
+        errorInfo.textContent = "";
+
+        if( !roomNameInput.value.trim() ) {
+          errorInfo.textContent = "Room name is required"
+          return 
         }
-        else {
+
+        if( !currentTempInput.value.trim() ) {
+          errorInfo.textContent = "Preferred temperature is required"
+          return
+        }
+
+        if( !warmPresetInput.value.trim() ) {
+          errorInfo.textContent = "Warm preset is required"
+          return
+        }
+
+        if ( !coldPresetInput.value.trim() ) {
+          errorInfo.textContent = "Cold preset is required"
+          return
+        }
+
+
         // adding a room.
         const newRoom = {
           name: roomNameInput.value.trim(),
           currTemp: Math.round( currentTempInput.value ),
           coldPreset: Math.round( coldPresetInput.value ),
           warmPreset: Math.round( warmPresetInput.value ),
-          image: "./assets/living-room.jpg",
+          image: URL.createObjectURL( roomImage.files[0] ),  // temporary 
           airConditionerOn: false,
-          startTime: "08:30 AM",
-          endTime: "12:00 PM",
+          startTime: "16:30",
+          endTime: "20:00",
       
           setCurrTemp(temp) {
             this.currTemp = temp;
@@ -824,18 +832,13 @@ openModalBtn.addEventListener("click", function () {
           }
        }
 
-
        console.log("new room = ", newRoom )
-       console.log(" room image = ", roomImage.value )
 
-      
        const updatedRooms = [ ...rooms, newRoom ]
        rooms = updatedRooms
        generateRooms()
-       // alert("room added")
        modalDiv.classList.replace("show-modal", "hide-modal")
  
-       // resetting inputs 
 
       // updating select to display new room
       roomSelect.innerHTML = ""
@@ -846,19 +849,16 @@ openModalBtn.addEventListener("click", function () {
         roomSelect.appendChild( option )
       })
 
-
-
-
-    }
-
-
       })
 
-    }
+    }   // end of check for if modal div classlist contains hidden
+
     else {
       // do nothing
     }
-  }
+
+  } // end of check for if modal is open
+
   else {
     // do nothing
   }

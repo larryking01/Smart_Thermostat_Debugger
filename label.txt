@@ -1,6 +1,0 @@
-              <label for="start time input">Set automatic cooling start time *</label>
-              <input type="time" name="start time input" id="start time input" required class="room-input">
-
-              
-              <label for="end time input">Set automatic cooling end time *</label>
-              <input type="time" name="end time input" id="end time input" required class="room-input">
