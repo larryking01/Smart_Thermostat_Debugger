@@ -1,5 +1,5 @@
 // Room objects
-// bug: room being constant disallows new rooms to be added.
+// bug: room variable declared initially as constant disallows new rooms to be added.
 let rooms = [
   {
     name: "Living Room",
@@ -37,7 +37,7 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // bug: adding additional clase to turn all ACs on
+    // adding additional clase to turn all ACs on
     turnAllAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
@@ -81,7 +81,7 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // bug: adding additional clase to turn all ACs on
+    // adding additional clase to turn all ACs on
     turnAllAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
@@ -127,7 +127,7 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // bug: adding additional clase to turn all ACs on
+    // adding additional clase to turn all ACs on
     turnAllAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
@@ -172,7 +172,7 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // bug: adding additional clase to turn all ACs on
+    // adding additional clase to turn all ACs on
     turnAllAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
@@ -184,8 +184,6 @@ let rooms = [
 ];
 
 
-// bug 3. linear-gradient values for cool and warm overlays were swapped.
-// fixed it by reversing them.
 const warmOverlay= `linear-gradient(
     to bottom,
    rgba(236, 96, 98, 0.2),
@@ -275,7 +273,6 @@ rooms.forEach((room) => {
 // Set current temperature to currently selected room
 const setSelectedRoom = (selectedRoomParam) => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoomParam );
-  console.log( "selected room:", room )
 
   selectedRoom = room.name;
   setIndicatorPoint(room.currTemp);
@@ -288,7 +285,7 @@ const setSelectedRoom = (selectedRoomParam) => {
 
   // Set the current room name
   document.querySelector(".room-name").innerText = selectedRoom;
-
+  
   document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
 };
 
@@ -296,28 +293,18 @@ const setSelectedRoom = (selectedRoomParam) => {
 
 
 roomSelect.addEventListener("change", function ( event ) {
-  // bug 1: selected room was initially returning an object. I had to retrieve
-  // the text of actual room using event delegation and correctly pass it to selectedRoom
-  // identified with console.log.
   selectedRoom = event.target.options[event.target.selectedIndex].innerText;
-  // console.log("selected room:", selectedRoom)
 
   setSelectedRoom(selectedRoom);
-
 });
 
 
 // Set preset temperatures
 const defaultSettings = document.querySelector(".default-settings");
 defaultSettings.addEventListener("click", function (e) {
-  console.log( "selected room from default settings = ", selectedRoom )
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
 
-  console.log( room )
 
-
-  // console.log( e.target.id )
-  // bug fix: used event delegation to correctly update temperature with
   // warm and cold presets
   if( e.target.id === "cool" ) {
     let updateTemperatureWithColdPreset = room.setCurrTemp.bind( room )
@@ -329,10 +316,6 @@ defaultSettings.addEventListener("click", function (e) {
     document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
     setOverlay( room )
 
-    
-    // generate rooms
-    // bug 8: current temperature in generate rooms column was not updating when preset was
-    // clicked to display because generateRooms was not being called.
     generateRooms()
   }
   else if( e.target.id === "warm" ) {
@@ -342,15 +325,10 @@ defaultSettings.addEventListener("click", function (e) {
     // bug 10: current temperature was displaying undefined when warm preset was called
     currentTemp.textContent = `${room.currTemp}°`;
 
-    // updating temp at header
-    // bug 9: current temperature at header section was not updating to match displayed 
     // cold preset
     document.querySelector(".currentTemp").innerText = `${room.currTemp}°`;
     setOverlay( room )
 
-    // generate rooms
-    // bug 8: current temperature in generate rooms column was not updating when preset was
-    // clicked to display because generateRooms was not being called.
     generateRooms()
 
   }
@@ -365,13 +343,8 @@ defaultSettings.addEventListener("click", function (e) {
 document.getElementById("increase").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
 
-  // same error as was the case in reduce temp
-  // const increaseRoomTemperature = room.increaseTemp.bind(room);
-
-
   if (room.currTemp < 32) {
     room.increaseTemp();
-    // console.log(`gggggggggggg`,increaseRoomTemp)
   }
 
   setIndicatorPoint(room.currTemp);
@@ -392,16 +365,9 @@ document.getElementById("increase").addEventListener("click", () => {
 
 document.getElementById("reduce").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
-  // console.log("room from btn click:", selectedRoom)
-
-  // room.decreaseTemp was being called but it was not binding to the actual
-  // room, so 'this' inside decreaseTemp was undefined and calling the 
-  // decreaseTemp function did not update the temperature.
-  const decreaseRoomTemperature = room.decreaseTemp.bind(room);
-  // console.log("decrease room temp:", decreaseRoomTemperature )
 
   if (room.currTemp > 10) {
-    decreaseRoomTemperature();
+    room.decreaseTemp()
   }
 
   setIndicatorPoint(room.currTemp);
@@ -436,8 +402,6 @@ document.getElementById("newPreset").addEventListener("click", () => {
 
 // close inputs
 document.getElementById("close").addEventListener("click", () => {
-
-  // bug: error span shows previous error message when selected.
   const errorSpan = document.querySelector(".error");
   errorSpan.textContent = ""
   
@@ -453,19 +417,9 @@ document.getElementById("save").addEventListener("click", () => {
   const errorSpan = document.querySelector(".error");
 
   if (coolInput.value && warmInput.value) {
-    // Validate the data
-    // bug 11. using Math.round to get the correct estimate for the
-    // temperature in case a user enters a decimal
     let coolInputValueAsNumber = Math.round( coolInput.value )
     let warmInputValueAsNumber = Math.round( warmInput.value )
 
-    // console.log("cool input value = ", coolInput.value )
-    // console.log("warm input value = ", warmInput.value )
-
-    // console.log("cool input value as number= ", coolInputValueAsNumber )
-    // console.log("warm input value as number = ", warmInputValueAsNumber )
-
-    
     if( coolInputValueAsNumber < 10 || coolInputValueAsNumber > 25 ) {
       errorSpan.style.display = "block";
       errorSpan.innerText = "Enter valid cool temperatures (10° - 24°)";
@@ -600,7 +554,7 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     generateRooms();
   }
 
-  // checking if turn all ACs button was clicked then turning on all ACs
+  // checking if turn all ACs button was clicked and turn all ACs on.
   if( e.target.classList.contains("turn-all-acs-on")) {
     rooms.forEach(( room ) => { room.turnAllAirconOn() })
 
@@ -608,25 +562,6 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
   }
 
 
-  // running the automated schedule.
-  // if( e.target.classList.contains("set-schedule-btn")) {
-
-  //   startTime = startTimeInput.value.trim()
-  //   endTime = endTimeInput.value.trim()
-
-  //   if( !startTime || !endTime ) {
-  //     alert("Enter values for both start and end times")
-  //   }
-  //   else {
-  //     scheduleActive = true
-  //     const room = rooms.find((room) => room.name === e.target.parentNode.id);
-  //     room.startTime = startTimeInput.value
-  //     room.endTime = endTimeInput.value
-  //     generateRooms()
-
-  //   }
-
-  // }
 
 });
 
@@ -669,8 +604,6 @@ setInterval(() => {
 
   const now = new Date()
   const currentTime = now.toTimeString().slice(0, 5)
-
-  console.log("current time = ", currentTime )
 
   const room = rooms.find(( room ) => room.name === selectedRoom )
   if ( !room ) {
@@ -732,7 +665,7 @@ openModalBtn.addEventListener("click", function () {
               <input type="number" min="10" max="24" step="1" name="cool preset input" id="cool preset input" required class="room-input">
 
               <label for="room image">Select room image *</label>
-              <input type="file" name="room image" id="room image" class="room-input" accept="image/*" required >
+              <input type="file" name="room image" id="room image" class="room-input room-file-input" accept="image/*" required >
               
               <button type="submit" class="add-room-btn"> Add room </button>
             </form>
@@ -831,8 +764,6 @@ openModalBtn.addEventListener("click", function () {
               : ( this.airConditionerOn = true )
           }
        }
-
-       console.log("new room = ", newRoom )
 
        const updatedRooms = [ ...rooms, newRoom ]
        rooms = updatedRooms
