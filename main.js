@@ -344,6 +344,7 @@ document.getElementById("increase").addEventListener("click", () => {
   const room = rooms.find((currRoom) => currRoom.name === selectedRoom);
 
   if (room.currTemp < 32) {
+    // increaseRoomTemperature() 
     room.increaseTemp();
   }
 
@@ -479,8 +480,8 @@ const generateRooms = () => {
           ${displayTime(room)}
 
           <span class="room-status" style="display: ${
-            room.airConditionerOn ? "" : "none"
-          }">${room.currTemp < 25 ? "Cooling room to: " : "Warming room to: "}${  // setting text description to communicate reasonable feedback
+            room.airConditionerOn ? "" : "none"}">
+          ${room.currTemp < 25 ? "Cooling room to: " : "Warming room to: "}${  // bug: wrong comparison operator used for setting feedback
       room.currTemp
     }°</span>
         </div>
