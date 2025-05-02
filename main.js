@@ -523,7 +523,7 @@ const generateRooms = () => {
           </div>
 
           ${displayTime(room)}
-         
+
           <span class="room-status" style="display: ${
             room.airConditionerOn ? "" : "none"
           }">${room.currTemp < 25 ? "Cooling room to: " : "Warming room to: "}${  // setting text description to communicate reasonable feedback
@@ -531,6 +531,7 @@ const generateRooms = () => {
     }°</span>
         </div>
     `;
+
   });
 
   roomsControlContainer.innerHTML = roomsHTML;
@@ -581,46 +582,125 @@ const displayTime = (room) => {
   `
 }
 
+
+
 generateRooms();
 
 
 
+
 document.querySelector(".rooms-control").addEventListener("click", (e) => {
+
   if (e.target.classList.contains("switch")) {
-    const room = rooms.find(
-      (room) => room.name === e.target.parentNode.parentNode.id
-    );
+    const room = rooms.find((room) => room.name === e.target.parentNode.parentNode.id);
 
     setSelectedRoom(e.target.parentNode.parentNode.id);
     room.toggleAircon();
 
-    // selectedRoom = e.target.parentNode.parentNode.id;
-
-    console.log(`qqqqq`,selectedRoom)
     generateRooms();
   }
 
-  // bug 12: the selected room was not updating accurately in room view and layout.
-  // if (e.target.classList.contains("room-name")) {
-  //   setSelectedRoom(e.target.parentNode.parentNode.id);
-  // }
-
   // checking if turn all ACs button was clicked then turning on all ACs
   if( e.target.classList.contains("turn-all-acs-on")) {
-    // alert("turn all acs on btn clicked")
-    rooms.forEach(( room ) => {
-      room.turnAllAirconOn()
-    })
+    rooms.forEach(( room ) => { room.turnAllAirconOn() })
 
     generateRooms()
-
-
   }
 
 
+  // running the automated schedule.
+  // if( e.target.classList.contains("set-schedule-btn")) {
 
+  //   startTime = startTimeInput.value.trim()
+  //   endTime = endTimeInput.value.trim()
+
+  //   if( !startTime || !endTime ) {
+  //     alert("Enter values for both start and end times")
+  //   }
+  //   else {
+  //     scheduleActive = true
+  //     const room = rooms.find((room) => room.name === e.target.parentNode.id);
+  //     room.startTime = startTimeInput.value
+  //     room.endTime = endTimeInput.value
+  //     generateRooms()
+
+  //   }
+
+  // }
 
 });
+
+
+
+let startTimeInput = document.querySelector(".start-time")
+let endTimeInput = document.querySelector(".end-time")
+let scheduleButton = document.querySelector(".set-schedule-btn")
+let startTime = null
+let endTime = null
+let scheduleActive = false
+
+
+// event listener to get start and end time values
+scheduleButton.addEventListener("click", function () {
+  const currentRoom = rooms.find(( room ) => room.name === selectedRoom )
+
+  startTime = startTimeInput.value.trim()
+  endTime = endTimeInput.value.trim()
+
+  if( !startTime || !endTime ) {
+    alert("Enter both start and end time values")
+  }
+  else {
+    // scheduleActive = true
+    currentRoom.startTime = startTime
+    currentRoom.endTime = endTime
+    generateRooms()
+
+    startTimeInput.value = ""
+    endTimeInput.value = ""
+  }
+  
+})
+
+
+// running the automated scheduling
+setInterval(() => {
+  // if( !scheduleActive ) return 
+
+  const now = new Date()
+  const currentTime = now.toTimeString().slice(0, 5)
+
+  console.log("current time = ", currentTime )
+
+  const room = rooms.find(( room ) => room.name === selectedRoom )
+  if ( !room ) {
+    return 
+  }
+  else {
+    if( room.startTime === startTime && room.endTime === endTime ) {
+      if( currentTime === room.startTime ) {
+        room.toggleAircon()
+        generateRooms()
+      }
+      if( currentTime === room.endTime ) {
+        room.toggleAircon()
+        generateRooms()
+      }
+    }
+}
+
+}, 60000 )
+
+
+
+
+
+
+
+
+
+
+
 
 
 
