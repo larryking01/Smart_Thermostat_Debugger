@@ -1,0 +1,27 @@
+{
+  "name": "skilled-thermostat-debugger",
+  "version": "1.0.0",
+  "description": "Smart Thermostat Debugger.",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larryking01/Smart_Thermostat_Debugger.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/larryking01/Smart_Thermostat_Debugger/issues"
+  },
+  "homepage": "https://github.com/larryking01/Smart_Thermostat_Debugger#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

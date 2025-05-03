@@ -21,8 +21,6 @@
     <!-- CSS -->
     <link rel="stylesheet" href="style.css" />
 
-    <!-- JS -->
-    <script src="./main.js" defer></script>
 
     <title>Smart Home | Thermostat Widget</title>
   </head>
@@ -163,5 +161,16 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+
+    <!-- JS -->
+    <script src="./main.js"></script>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if ( typeof StarterLogic === "function" ) {
+          StarterLogic()
+        }
+      })
+    </script>
+
   </body>
 </html>
