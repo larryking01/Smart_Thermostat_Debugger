@@ -13,6 +13,7 @@
   --accent: #ffd7a8;
   --btn-primary-bg: #515155;
   --btn-secondary-bg: #141414;
+  --all-ac-on-btn-bg: #3a4ed5
 }
 
 body,
@@ -426,20 +427,14 @@ svg.point {
     position: fixed;            
     top: 7%;
     left: 30%;
-    /* transform: translate(-50%, -50%);   */
     background-color: white;
     padding: 2rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     z-index: 10000;              /* Ensure it's above other content */
     border-radius: 8px;
     width: 30rem;
-    /* max-width: 500px; */
-    /* display: flex;
-    flex-direction: column; */
     display: flex;
     flex-direction: column;
-    
-    
 }
 
 
@@ -532,7 +527,8 @@ label {
 
 .turn-all-acs-on {
   border: none;
-  background-color: var(--btn-primary-bg);
+  background-color:  var(--all-ac-on-btn-bg);
+  box-shadow: 0 0 10px rgba(58, 207, 213, 0.5);
   color: white;
   border-radius: 0.625rem;
   padding: 0.3rem;
@@ -542,8 +538,27 @@ label {
 }
 
 .turn-all-acs-on:hover {
+  background-color: var(--cool-blue);
+  filter: brightness(1.15);
+  box-shadow: 0 0 12px rgba(58, 207, 213, 0.7);
+}
+
+
+.turn-all-acs-off {
+  border: none;
+  background-color: var(--btn-primary-bg);
+  color: white;
+  border-radius: 0.625rem;
+  padding: 0.3rem;
+  width: 7rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.turn-all-acs-off:hover {
   background-color: #141414;
 }
+
 
 
 
@@ -589,20 +604,92 @@ label {
 
 
 
+/* tablet responsiveness */
+@media (max-width: 1060px) {
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* align-items: start; */
+  }
+
+  .container {
+    width: 450px;
+  }
+
+  .show-modal {
+    position: fixed;            
+    top: 9%;
+    left: 26%;
+    background-color: white;
+    padding: 1.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10000;              /* Ensure it's above other content */
+    border-radius: 8px;
+    width: 24rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
+}
 
 
 
 
-@media only screen and (max-width: 470px) {
+/* mobile responsiveness */
+@media only screen and (max-width: 768px) {
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* align-items: start; */
+  }
+
+  
   .container {
     width: 360px;
   }
+
+
+  .show-modal {
+      position: fixed;            
+      top: 9%;
+      left: 29%;
+      background-color: white;
+      padding: 1.4rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 10000;              /* Ensure it's above other content */
+      border-radius: 8px;
+      width: 20rem;
+      display: flex;
+      flex-direction: column;
+  }
+  
 }
+
+
+
 
 @media only screen and (max-width: 380px) {
   .container {
     width: 320px;
   }
+
+  .show-modal {
+    position: fixed;            
+    top: 9%;
+    left: 14%;
+    background-color: white;
+    padding: 1.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 10000;              /* Ensure it's above other content */
+    border-radius: 8px;
+    width: 17rem;
+    display: flex;
+    flex-direction: column;
+}
+
 }
 
 .powerOn {

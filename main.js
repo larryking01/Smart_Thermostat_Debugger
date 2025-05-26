@@ -37,12 +37,21 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // adding additional clase to turn all ACs on
-    turnAllAirconOn() {
+    // adding additional method to turn all ACs on
+    turnAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
         : ( this.airConditionerOn = true )
+    },
+
+
+    // method to turn all ACs off
+    turnAirconOff() {
+      this.airConditionerOn
+      ? ( this.airConditionerOn = false )
+      : ( this.airConditionerOn = false )
     }
+
   },
 
   {
@@ -81,13 +90,20 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // adding additional clase to turn all ACs on
-    turnAllAirconOn() {
+    // adding additional method to turn all ACs on
+    turnAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
         : ( this.airConditionerOn = true )
+    },
+
+    // method to turn all ACs off
+    turnAirconOff() {
+      this.airConditionerOn
+      ? ( this.airConditionerOn = false )
+      : ( this.airConditionerOn = false )
     }
-    
+
   },
 
 
@@ -127,11 +143,18 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // adding additional clase to turn all ACs on
-    turnAllAirconOn() {
+    // adding additional method to turn all ACs on
+    turnAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
         : ( this.airConditionerOn = true )
+    },
+
+    // method to turn all ACs off
+    turnAirconOff() {
+      this.airConditionerOn
+      ? ( this.airConditionerOn = false )
+      : ( this.airConditionerOn = false )
     }
     
   },
@@ -172,15 +195,21 @@ let rooms = [
         : (this.airConditionerOn = true);
     },
 
-    // adding additional clase to turn all ACs on
-    turnAllAirconOn() {
+    // adding additional method to turn all ACs on
+    turnAirconOn() {
       this.airConditionerOn
         ? ( this.airConditionerOn = true )
         : ( this.airConditionerOn = true )
+    },
+
+    // method to turn all ACs off
+    turnAirconOff() {
+      this.airConditionerOn
+      ? ( this.airConditionerOn = false )
+      : ( this.airConditionerOn = false )
     }
     
   },
-
 ];
 
 
@@ -196,6 +225,10 @@ const coolOverlay = `linear-gradient(
   rgba(141, 158, 247, 0.2),
   rgba(194, 197, 215, 0.1)
     )`;
+
+
+// keep track of all rooms AC on/off status
+let all_rooms_ac_on = false;
 
 
 const setInitialOverlay = () => {
@@ -463,8 +496,12 @@ const generateRooms = () => {
   const roomsControlContainer = document.querySelector(".rooms-control");
 
   // bug: modifying starter roomHTML code to include button to turn on all ACs
-  let roomsHTML = `<button class="turn-all-acs-on" title="Turn all Acs on">Turn All ACs On</button>`;
+  let roomsHTML = all_rooms_ac_on === false ?
+    `<button class="turn-all-acs-on" title="Turn all Acs on">Turn All ACs On</button>`
+    :
+    `<button class="turn-all-acs-off" title="Turn all Acs off">Turn All ACs Off</button>`;
 
+  
   rooms.forEach((room) => {
     roomsHTML += `
     <div class="room-control" id="${room.name}">
@@ -555,12 +592,25 @@ document.querySelector(".rooms-control").addEventListener("click", (e) => {
     generateRooms();
   }
 
-  // checking if turn all ACs button was clicked and turn all ACs on.
+  // checking if turn all ACs on button was clicked and turn all ACs on.
   if( e.target.classList.contains("turn-all-acs-on")) {
-    rooms.forEach(( room ) => { room.turnAllAirconOn() })
+    rooms.forEach(( room ) => { room.turnAirconOn() })
+    all_rooms_ac_on = true;
 
     generateRooms()
   }
+
+
+  // checking if turn all ACs off button was clicked and turn all ACs off.
+  if( e.target.classList.contains("turn-all-acs-off")) {
+    rooms.forEach(( room ) => { room.turnAirconOff() })
+    all_rooms_ac_on = false;
+    
+    generateRooms()
+  }
+
+
+
 
 
 
@@ -759,10 +809,16 @@ openModalBtn.addEventListener("click", function () {
               : (this.airConditionerOn = true);
           },
 
-          turnAllAirconOn() {
+          turnAirconOn() {
             this.airConditionerOn
               ? ( this.airConditionerOn = true )
               : ( this.airConditionerOn = true )
+          },
+
+          turnAirconOff() {
+            this.airConditionerOn
+            ? ( this.airConditionerOn = false )
+            : ( this.airConditionerOn = false )
           }
        }
 
