@@ -655,7 +655,7 @@ label {
   .show-modal {
       position: fixed;            
       top: 9%;
-      left: 20%;
+      left: 17%;
       background-color: white;
       padding: 1.4rem;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
